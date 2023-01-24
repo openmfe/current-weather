@@ -7,7 +7,7 @@ services:
     environment:
       MFE_FRONTEND_URL: "${MFE_FRONTEND_URL}"
     volumes:
-      - '/tmp:/tmp'
+      - '/tmp/current-weather:/tmp'
     ports:
       - '${MFE_BACKEND_PORT}:8080'
 
