@@ -180,7 +180,7 @@ class CurrentWeather extends HTMLElement
     }
 
     async _fetchData() {
-        const response = await fetch(`__BACKEND_URL__/api?lat=${this._attr.lat}&lon=${this._attr.lon}`)
+        const response = await fetch(`__BACKEND_URL__/runtime?lat=${this._attr.lat}&lon=${this._attr.lon}`)
         this._weather = await response.json()
     }
 }

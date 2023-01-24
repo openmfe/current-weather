@@ -5,6 +5,9 @@ Parameters:
     Type: String
   lambdaFile:
     Type: String
+  apiGatewayStageName:
+    Type: String
+    Default: api
 
 Resources:
   lambdaRole:
@@ -42,41 +45,41 @@ Resources:
         Variables:
           NODE_ENV: production
       FunctionName: !Ref AWS::StackName
-      Handler: index.handler
+      Handler: lambda.handler
       MemorySize: 128
       Role: !GetAtt lambdaRole.Arn
-      Runtime: "nodejs14.x"
+      Runtime: "nodejs18.x"
       Timeout: 10
 
   lambdaLogGroup:
     Type: "AWS::Logs::LogGroup"
     Properties:
-      LogGroupName: !Sub "/aws/${AWS::StackName}"
+      LogGroupName: !Sub "/aws/lambda/${AWS::StackName}"
       RetentionInDays: 7
 
-  lambdaUrl:
-    Type: "AWS::Lambda::Url"
-    Properties:
-      AuthType: NONE
-      TargetFunctionArn: !Ref lambdaFunction
-      Cors:
-        AllowHeaders:
-          - '*'
-        AllowMethods:
-          - GET
-        AllowOrigins:
-          - '*'
-        ExposeHeaders:
-          - Date
-        MaxAge: 3600
+  # lambdaUrl:
+  #   Type: "AWS::Lambda::Url"
+  #   Properties:
+  #     AuthType: NONE
+  #     TargetFunctionArn: !Ref lambdaFunction
+  #     Cors:
+  #       AllowHeaders:
+  #         - '*'
+  #       AllowMethods:
+  #         - GET
+  #       AllowOrigins:
+  #         - '*'
+  #       ExposeHeaders:
+  #         - Date
+  #       MaxAge: 3600
 
-  lambdaPermission:
-      Type: "AWS::Lambda::Permission"
-      Properties:
-          Action: "lambda:InvokeFunctionUrl"
-          Principal: "*"
-          FunctionName: !Ref lambdaFunction
-          FunctionUrlAuthType: NONE
+  # lambdaPermission:
+  #   Type: "AWS::Lambda::Permission"
+  #   Properties:
+  #     Action: "lambda:InvokeFunctionUrl"
+  #     Principal: "*"
+  #     FunctionName: !Ref lambdaFunction
+  #     FunctionUrlAuthType: NONE
 
   cloudfrontOriginIdentity:
     Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
@@ -133,13 +136,13 @@ Resources:
         PriceClass: PriceClass_100
         Origins:
          - Id: bucket
-           DomainName: !Sub "${AWS::AccountId}-${AWS::Region}-${AWS::StackName}.s3.eu-central-1.amazonaws.com"
+           DomainName: !Sub "${AWS::AccountId}-${AWS::Region}-${AWS::StackName}.s3.${AWS::Region}.amazonaws.com"
            S3OriginConfig:
              OriginAccessIdentity: !Sub "origin-access-identity/cloudfront/${cloudfrontOriginIdentity}"
-         - Id: lambda
-           DomainName: !Join [ '', !Split [ '/', !Join [ '', !Split [ 'https://', !GetAtt lambdaUrl.FunctionUrl ] ] ] ] # get domain name from URL
-           CustomOriginConfig:
-             OriginProtocolPolicy : https-only
+        #  - Id: lambda
+        #    DomainName: !Join [ '', !Split [ '/', !Join [ '', !Split [ 'https://', !GetAtt lambdaUrl.FunctionUrl ] ] ] ] # get domain name from URL
+        #    CustomOriginConfig:
+        #      OriginProtocolPolicy : https-only
         DefaultCacheBehavior:
           AllowedMethods:
             - GET
@@ -156,27 +159,104 @@ Resources:
               Forward: none
           TargetOriginId: bucket
           ViewerProtocolPolicy: https-only
-        CacheBehaviors:
-          - PathPattern: /prerender*
-            AllowedMethods:
-              - GET
-              - HEAD
-              - OPTIONS
-            CachedMethods:
-              - GET
-              - HEAD
-              - OPTIONS
-            DefaultTTL: 600
-            ForwardedValues:
-              QueryString: true
-              Cookies:
-                Forward: none
-            TargetOriginId: lambda
-            ViewerProtocolPolicy: https-only
+        # CacheBehaviors:
+        #   - PathPattern: /api*
+        #     AllowedMethods:
+        #       - GET
+        #       - HEAD
+        #       - OPTIONS
+        #     CachedMethods:
+        #       - GET
+        #       - HEAD
+        #       - OPTIONS
+        #     DefaultTTL: 600
+        #     ForwardedValues:
+        #       QueryString: true
+        #       Cookies:
+        #         Forward: none
+        #     TargetOriginId: lambda
+        #     ViewerProtocolPolicy: https-only
+
+
+# API Gateway
+
+  apigw:
+    Type: AWS::ApiGatewayV2::Api
+    Properties:
+      Name: !Ref AWS::StackName
+      ProtocolType: HTTP
+
+  apigwStage:
+    Type: "AWS::ApiGatewayV2::Stage"
+    Properties:
+      ApiId: !Ref apigw
+      StageName: !Ref apiGatewayStageName
+      AutoDeploy: true
+      DefaultRouteSettings:
+        DetailedMetricsEnabled: true
+        DataTraceEnabled: false
+        ThrottlingBurstLimit: 10
+        ThrottlingRateLimit: 10
+
+  apigwInvokePermissionRuntime:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt lambdaFunction.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${apigw}/*/*/*"
+
+  # apigwInvokePermissionPrerender:
+  #   Type: "AWS::Lambda::Permission"
+  #   Properties:
+  #     Action: lambda:InvokeFunction
+  #     FunctionName: !GetAtt prerenderLambdaFunction.Arn
+  #     Principal: apigateway.amazonaws.com
+  #     SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${apigw}/*/*/*"
+
+  apigwIntegrationRuntime:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref apigw
+      IntegrationMethod: POST
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !Sub
+        - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdaArn}/invocations"
+        - lambdaArn: !GetAtt lambdaFunction.Arn
+      PayloadFormatVersion: 2.0
+
+  # apigwIntegrationPrerender:
+  #   Type: AWS::ApiGatewayV2::Integration
+  #   Properties:
+  #     ApiId: !Ref apigw
+  #     IntegrationMethod: POST
+  #     IntegrationType: AWS_PROXY
+  #     IntegrationUri: !Sub
+  #       - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdaArn}/invocations"
+  #       - lambdaArn: !GetAtt prerenderLambdaFunction.Arn
+  #     PayloadFormatVersion: 2.0
+
+  apigwRouteRuntime:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref apigw
+      RouteKey: "GET /runtime"
+      Target: !Sub "integrations/${apigwIntegrationRuntime}"
+
+  # apigwRoutePrerender:
+  #   Type: AWS::ApiGatewayV2::Route
+  #   Properties:
+  #     ApiId: !Ref apigw
+  #     RouteKey: "GET /prerender"
+  #     Target: !Sub "integrations/${apigwIntegrationPrerender}"
+
 
 Outputs:
-  lambdaUrl:
-    Value: !GetAtt lambdaUrl.FunctionUrl
+  apiGatewayUrl:
+    Value: !Sub "https://${apigw}.execute-api.${AWS::Region}.amazonaws.com/${apiGatewayStageName}"
+
+  bucketName:
+    Value: !Ref s3Bucket
 
   cloudfrontDistributionId:
     Value: !Ref cloudfrontDistribution

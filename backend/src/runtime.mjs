@@ -1,4 +1,4 @@
-import data from './data.js'
+import data from './data.mjs'
 
 export default async function(request) {
 

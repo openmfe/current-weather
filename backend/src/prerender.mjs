@@ -1,9 +1,9 @@
 import juice from 'juice'
 import { minify } from "html-minifier-terser"
-import data from './data.js'
+// import data from './data.mjs'
 
 export default async function (request) {
-    const data =  await data(request)
+    // const weather = await data(request)
 
     const html = juice(`
             <style>

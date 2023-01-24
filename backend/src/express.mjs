@@ -1,13 +1,13 @@
 import express from 'express'
 import cors from 'cors'
-import runtime from './runtime.js'
-import prerender from './prerender.js'
+import runtime from './runtime.mjs'
+import prerender from './prerender.mjs'
 
 const port = process.env.MFE_BACKEND_PORT || 8080
 const server = express()
 server.use(cors())
 
-const handlers = { api : runtime, prerender }
+const handlers = { runtime, prerender }
 
 ;(async () => {
     server
