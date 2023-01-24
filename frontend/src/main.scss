@@ -1,0 +1,212 @@
+$url-base-line: "__FRONTEND_URL__/img/weather/line/svg-static";
+$url-base-fill: "__FRONTEND_URL__/img/weather/fill/svg-static";
+
+* {
+    all: revert;
+    margin: 0;
+    padding: 0;
+    font-family: "current-weather_montserat", Arial, sans-serif;
+}
+
+.elem {
+    --base: 10;
+    font-display: swap;
+    display: block;
+    overflow: hidden;
+    // position: relative;
+}
+
+.elem.w-s {
+    --base: 12;
+}
+
+.elem.w-m {
+    --base: 14;
+}
+
+.elem.w-l {
+    --base: 16;
+}
+
+.elem.w-xl {
+    --base: 18;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.cell {
+    text-align: right;
+    padding:
+        calc(0.2px * var(--base))
+        calc(0.5px * var(--base))
+        calc(0.2px * var(--base))
+        calc(3.3px * var(--base));
+    background: url(#{$url-base-line}/raindrops.svg) no-repeat calc(0% - 0.5px * var(--base)) center;
+    background-size: calc(4px * var(--base));
+    margin-left: calc(1.5px * var(--base));
+    white-space: nowrap;
+}
+
+.value {
+    font-size: calc(2.4px * var(--base));
+}
+
+.unit {
+    font-size: calc(2px * var(--base));
+    margin-left: 0.2em;
+}
+
+.current {
+    text-align: right;
+    overflow: hidden;
+    white-space: nowrap;
+
+    .primary {
+        justify-content: space-evenly;
+        margin: calc(-2px * var(--base)) 0 0; // those clouds have a lot of whitespace
+
+        .cloud {
+            width: calc(14px * var(--base));
+            max-height: calc(14px * var(--base));
+        }
+
+        .temp {
+            .value {
+                font-size: calc(5px * var(--base));
+            }
+
+            .unit {
+                font-size: calc(4px * var(--base));
+            }
+        }
+    }
+
+    .secondary {
+        justify-content: space-evenly;
+        margin-bottom: calc(2px * var(--base));
+
+        .prec {
+            background-image: url(#{$url-base-line}/raindrops.svg);
+        }
+
+        .wind {
+            background-image: url(#{$url-base-fill}/windsock.svg);
+        }
+    }
+}
+
+
+.today {
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    width: 100%;
+    overflow: hidden;
+    justify-content: space-between;
+    align-items: stretch;
+
+    .cells {
+        width: 33.3333333333333333333%;
+        overflow: hidden;
+        flex: 1 0 auto;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        &:not(:first-child) {
+            border-left: 1px solid #ccc;
+        }
+    }
+
+    .cell {
+        padding:
+            calc(0.4px * var(--base))
+            calc(0.5px * var(--base))
+            calc(0.4px * var(--base))
+            calc(2.5px * var(--base));
+        background-size: calc(2.5px * var(--base));
+        background-position: 0% center;
+        font-weight: 500;
+    }
+
+    .value {
+        font-size: calc(1.5px * var(--base));
+    }
+
+    .unit {
+        font-size: calc(1.1px * var(--base));
+    }
+
+    .temp {
+        background-image: url(#{$url-base-fill}/thermometer.svg);
+    }
+
+    .wind {
+        background-image: url(#{$url-base-fill}/windsock.svg);
+    }
+
+    .gusts {
+        background-image: url(#{$url-base-fill}/umbrella-wind-alt.svg);
+    }
+
+    .prec {
+        background-image: url(#{$url-base-fill}/raindrops.svg);
+    }
+
+    .sunrise {
+        background-image: url(#{$url-base-fill}/sunrise.svg);
+    }
+
+    .sunset {
+        background-image: url(#{$url-base-fill}/sunset.svg);
+    }
+}
+
+// .forecast {
+//     padding: 1rem;
+
+//     table {
+//         width: 100%;
+//     }
+
+//     tr.current td {
+//         background: #eee;
+//     }
+
+//     td {
+//         padding: 0.2rem;
+//         text-align: right;
+//         vertical-align: middle;
+//         font-size: 1rem;
+
+//         &.time {
+//             font-weight: 500;
+//             width: 1%;
+//         }
+
+//         .figure {
+//             @extend .row;
+//             justify-content: flex-end;
+//         }
+//     }
+
+//     img {
+//         vertical-align: middle;
+//         min-width: 2rem;
+//         height: auto;
+//     }
+
+//     .figure img {
+//         height: 2rem;
+//     }
+
+//     .value {
+//         display: inline-block;
+//         font-size: 1rem;
+//     }
+// }

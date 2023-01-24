@@ -1,0 +1,8 @@
+FROM node:18-alpine
+
+WORKDIR /srv
+COPY backend .
+RUN npm ci --only-prod --no-audit
+EXPOSE 8080
+
+CMD [ "npm", "run", "prod" ]

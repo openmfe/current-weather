@@ -1,0 +1,14 @@
+{
+  "de-DE": {
+    "p": "(n != 1)",
+    "t": {
+      "_\u0004Sunday": "Sonntag",
+      "_\u0004Monday": "Montag",
+      "_\u0004Tuesday": "Dienstag",
+      "_\u0004Wednesday": "Mittwoch",
+      "_\u0004Thursday": "Donnerstag",
+      "_\u0004Friday": "Freitag",
+      "_\u0004Saturday": "Samstag"
+    }
+  }
+}

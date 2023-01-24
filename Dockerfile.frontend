@@ -1,0 +1,11 @@
+FROM node:18-alpine AS build
+COPY frontend/ /build
+WORKDIR /build
+RUN npm i --only=prod
+ARG MFE_BACKEND_URL=__BACKEND_URL__
+ARG MFE_FRONTEND_URL=__FRONTEND_URL__
+RUN npm run build
+
+FROM nginx:stable-alpine AS prod
+COPY --from=build /build/dist/ /srv
+WORKDIR /srv

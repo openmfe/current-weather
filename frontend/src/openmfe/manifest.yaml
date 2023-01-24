@@ -1,0 +1,42 @@
+version: "1.1" # version of the OpenMFE spec
+
+name:
+icon: ./icon.svg
+tag: current-weather
+url:
+  frontend: ../main.js
+  prerender: __BACKEND_URL__/prerender
+publisher:
+  name: Alexander Günsche
+  email: research@lxg.de
+description: This is a microfrontend for displaying the current weather at a location specified via longitude and latitude.
+documentation: documentation.md
+
+attributes:
+  - name: lat
+    description: The latitude of the location for which the weather should be shown.
+    required: true
+    schema:
+      type: number
+      minimum: -90
+      maximum: 90
+  - name: lon
+    description: The longitude of the location for which the weather should be shown.
+    required: true
+    schema:
+      type: number
+      minimum: -180
+      maximum: 180
+  - name: locale
+    description: The locale (language) of the user interface. Currently, English and German are supported.
+    required: false
+    default: en-GB
+    schema:
+      type: string
+      enum: ["de-DE", "en-GB"]
+
+examples:
+  - description: Shows the weather in Alsdorf, Germany.
+    attributes:
+      lat: 50.8560604
+      lon: 6.1558148
