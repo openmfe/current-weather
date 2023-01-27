@@ -105,39 +105,6 @@ class CurrentWeather extends HTMLElement
                         </div>
                     </div>
                 </div>
-
-                ${/*
-              <div class="forecast">
-                    <table>
-                        ${this._weather[0].hourly.map((values, hour) => `
-                            <tr>
-                                <td class="time">${ `${hour.toString().padStart(2, "0")}:00` }</td>
-                                <td>
-                                    <img src="${getIcon(values.i, "fill")}">
-                                </td>
-                                <td>
-                                    <div class="figure temperature">
-                                        <img src="/img/weather/fill/svg-static/thermometer.svg" alt="">
-                                        <span class="value">${ values.t.toFixed(1) } °C</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="figure precipation">frontend/src/openmfe/documentation.md
-                                        <img src="/img/weather/fill/svg-static/raindrops.svg" alt="">
-                                        <span class="value">${ values.p.toFixed(1) } l/m²</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="figure wind">
-                                        <img src="/img/weather/fill/svg-static/windsock.svg" alt="">
-                                        <span class="value">${ Math.round(values.w) } km/h</span>
-                                    </div>
-                                </td>
-                            </tr>
-                        `).join("")}
-                    </table>
-                </div>
-                */""}
             </div>
         `
 
@@ -204,7 +171,7 @@ const fonts = [
 
 fonts.forEach(font => loadFont("montserat", ...font))
 
-const IMG_URL_TPL = "__FRONTEND_URL__/img/weather/__STYLE__/__ANIM__/__NAME__.svg"
+const IMG_URL_TPL = `__FRONTEND_URL__/img/weather/__STYLE__/__ANIM__/__NAME__.svg?__RAND__`
 
 const getIcon = (name, style = "line", anim = false) => IMG_URL_TPL
     .replace("__STYLE__", style)

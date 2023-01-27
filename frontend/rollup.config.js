@@ -5,6 +5,7 @@ import copy from 'rollup-plugin-copy'
 import sass from 'sass'
 import json from "@rollup/plugin-json"
 import resolve from '@rollup/plugin-node-resolve'
+import { randomUUID } from "node:crypto"
 
 export default {
     input: 'src/main.js',
@@ -59,7 +60,8 @@ export default {
             preventAssignment: false,
             'html': '', // we use the html only for hinting the IDE
             '__BACKEND_URL__': process.env.MFE_BACKEND_URL,
-            '__FRONTEND_URL__': process.env.MFE_FRONTEND_URL
+            '__FRONTEND_URL__': process.env.MFE_FRONTEND_URL,
+            '__RAND__': randomUUID()
         }),
         process.env.BUILD === "prod" ? terser({
             mangle: {
