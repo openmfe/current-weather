@@ -51,9 +51,7 @@ export default {
                         .replace(/__FRONTEND_URL__/g, process.env.MFE_FRONTEND_URL)
                 },
                 { src: "node_modules/@lxg/weather-icons/production/fill/svg-static", dest: "dist/img/weather/fill/" },
-                { src: "node_modules/@lxg/weather-icons/production/line/svg-static", dest: "dist/img/weather/line/" },
-                { src: "node_modules/@lxg/weather-icons/production/fill/svg", dest: "dist/img/weather/fill/" },
-                { src: "node_modules/@lxg/weather-icons/production/line/svg", dest: "dist/img/weather/line/" }
+                { src: "node_modules/@lxg/weather-icons/production/line/svg-static", dest: "dist/img/weather/line/" }
              ]
         }),
         replace({
