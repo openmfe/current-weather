@@ -5,7 +5,9 @@ set -e
 dir=$(pwd)
 export AWS_DEFAULT_REGION=eu-central-1
 export STACK_NAME="${STACK_NAME:-current-weather}"
-export LAMBDA_BUCKET="${LAMBDA_BUCKET:-lambda-deployment-903682703656-$AWS_DEFAULT_REGION}"
+
+[ -z "$LAMBDA_BUCKET" ] && echo "Error: LAMBDA_BUCKET must be set." && exit 1
+
 
 # prepare build env
 [ -d $dir/build ] && rm -r $dir/build
