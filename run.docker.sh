@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# must be actively sourced, because docker-compose can’t do interpolation
-source .env
+for varname in MFE_FRONTEND_PORT MFE_BACKEND_PORT MFE_BACKEND_URL MFE_FRONTEND_URL; do
+    [ -z "${!varname}" ] && echo "Error: The environment variable $varname is not set." && exit 1
+done
 
 export BACKEND_IMAGE=current-weather-backend:latest
 export FRONTEND_IMAGE=current-weather-frontend:latest

@@ -13,6 +13,7 @@ class CurrentWeather extends HTMLElement
         super()
 
         this._shadow = this.attachShadow({ mode: "open" })
+        this._shadow.innerHTML = this.innerHTML // retain skeleton until data is fetched
 
         // localisation
         this._l10n = new L10n(translations, "de-DE")
@@ -44,7 +45,6 @@ class CurrentWeather extends HTMLElement
 
     async _render() {
         const now = new Date()
-
 
         this._shadow.innerHTML = html`
             <style>${scss}</style>

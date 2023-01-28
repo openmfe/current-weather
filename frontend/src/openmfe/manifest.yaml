@@ -38,7 +38,5 @@ attributes:
 examples:
   - description: Shows the weather in Aachen, Germany.
     attributes:
-      lat: "50.776334"
-      lon: "6.083706"
-
-
+      lat: 50.776334
+      lon: 6.083706

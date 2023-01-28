@@ -16,12 +16,13 @@ export default async function (request) {
                 }
 
                 svg {
-                    width: 30px;
-                    height: auto
+                    width: 50px;
+                    height: auto;
                 }
 
                 p {
-                    color: #777
+                    color: #888;
+                    text-align: center;
                 }
 
             </style>
