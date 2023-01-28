@@ -17,6 +17,11 @@ export default {
         clearScreen: false
     },
     plugins: [
+        { // watch manifest for changes
+            async buildStart() {
+                this.addWatchFile("src/openmfe/manifest.yaml")
+            }
+        },
         { // scss loader
             transform(code, id) {
                 return (id.slice(-5) === '.scss') ? {

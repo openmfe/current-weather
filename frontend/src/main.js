@@ -45,6 +45,7 @@ class CurrentWeather extends HTMLElement
     async _render() {
         const now = new Date()
 
+
         this._shadow.innerHTML = html`
             <style>${scss}</style>
 

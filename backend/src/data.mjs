@@ -76,8 +76,6 @@ export default async function ({ lat, lon }) {
                 i: getWeatherIcon(null, sunrise, sunset, data.daily.weathercode[d], data.daily.precipitation_sum[d], data.daily.snowfall_sum[d])
             }
 
-            // console.log(entry.day.sr, data.daily.sunrise[d]);
-
             weather.push(entry)
         }
 
