@@ -115,8 +115,6 @@ class CurrentWeather extends HTMLElement
     async _resize() {
         const width = this.parentElement.clientWidth
 
-        console.log(width);
-
         if (width > 1000)
             this._size = "w-xl"
         else if (width > 800)

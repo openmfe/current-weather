@@ -10,5 +10,6 @@ export FRONTEND_IMAGE=current-weather-frontend:latest
 docker build -f Dockerfile.backend -t $BACKEND_IMAGE .
 docker build -f Dockerfile.frontend -t $FRONTEND_IMAGE .
 
-docker-compose up --remove-orphans --force-recreate
+# passing all arguments to docker-compose
+docker-compose up --remove-orphans --force-recreate $@
 

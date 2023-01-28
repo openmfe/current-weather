@@ -16,6 +16,7 @@ The application will by default run on localhost. In production, it should be pl
 - If you run the application  Copy the `.env.dev` file to `.env.dist`.
 - change the URL to the **external/public** one. For example, if if you expose Docker behind a proxy such as NGINX, you need to set the public hostname and proxy path here.
 
+source .env.prod && ./run.docker.sh -d
 
 Run the following command to launch the project: `source .env.prod && ./run.docker.sh`
 
