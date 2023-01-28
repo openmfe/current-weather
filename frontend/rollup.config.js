@@ -5,6 +5,12 @@ import copy from 'rollup-plugin-copy'
 import sass from 'sass'
 import json from "@rollup/plugin-json"
 import resolve from '@rollup/plugin-node-resolve'
+import { randomUUID } from "node:crypto"
+
+// for the copy plugin
+const transform = contents => contents.toString()
+    .replace(/__BACKEND_URL__/g, process.env.MFE_BACKEND_URL)
+    .replace(/__FRONTEND_URL__/g, process.env.MFE_FRONTEND_URL)
 
 export default {
     input: 'src/main.js',
@@ -13,9 +19,15 @@ export default {
         format: 'iife'
     },
     watch: {
+        exclude: 'src/node_modules/**',
         clearScreen: false
     },
     plugins: [
+        { // watch manifest for changes
+            async buildStart() {
+                this.addWatchFile("src/openmfe/manifest.yaml")
+            }
+        },
         { // scss loader
             transform(code, id) {
                 return (id.slice(-5) === '.scss') ? {
@@ -41,25 +53,19 @@ export default {
         }) : null,
         copy({
             targets: [
-                { src: ['src/openmfe', 'src/fonts', 'src/index.html'], dest: 'dist' },
-                {
-                    src: 'src/openmfe/manifest.yaml',
-                    dest: 'dist/openmfe',
-                    transform: contents => contents.toString()
-                        .replace(/__BACKEND_URL__/g, process.env.MFE_BACKEND_URL)
-                        .replace(/__FRONTEND_URL__/g, process.env.MFE_FRONTEND_URL)
-                },
+                { src: ['src/fonts', 'src/openmfe'], dest: 'dist' },
+                { src: 'src/openmfe/manifest.yaml', dest: 'dist/openmfe', transform },
+                { src: 'src/index.html', dest: 'dist', transform },
                 { src: "node_modules/@lxg/weather-icons/production/fill/svg-static", dest: "dist/img/weather/fill/" },
-                { src: "node_modules/@lxg/weather-icons/production/line/svg-static", dest: "dist/img/weather/line/" },
-                { src: "node_modules/@lxg/weather-icons/production/fill/svg", dest: "dist/img/weather/fill/" },
-                { src: "node_modules/@lxg/weather-icons/production/line/svg", dest: "dist/img/weather/line/" }
+                { src: "node_modules/@lxg/weather-icons/production/line/svg-static", dest: "dist/img/weather/line/" }
              ]
         }),
         replace({
             preventAssignment: false,
             'html': '', // we use the html only for hinting the IDE
             '__BACKEND_URL__': process.env.MFE_BACKEND_URL,
-            '__FRONTEND_URL__': process.env.MFE_FRONTEND_URL
+            '__FRONTEND_URL__': process.env.MFE_FRONTEND_URL,
+            '__RAND__': randomUUID()
         }),
         process.env.BUILD === "prod" ? terser({
             mangle: {

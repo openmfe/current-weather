@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 set -e
-source .env
+source .env.dev
 
 cd backend
 [ -d node_modules ] || npm i

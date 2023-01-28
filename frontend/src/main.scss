@@ -1,5 +1,6 @@
 $url-base-line: "__FRONTEND_URL__/img/weather/line/svg-static";
 $url-base-fill: "__FRONTEND_URL__/img/weather/fill/svg-static";
+$version: unique-id();
 
 * {
     all: revert;
@@ -13,7 +14,6 @@ $url-base-fill: "__FRONTEND_URL__/img/weather/fill/svg-static";
     font-display: swap;
     display: block;
     overflow: hidden;
-    // position: relative;
 }
 
 .elem.w-s {
@@ -45,7 +45,7 @@ $url-base-fill: "__FRONTEND_URL__/img/weather/fill/svg-static";
         calc(0.5px * var(--base))
         calc(0.2px * var(--base))
         calc(3.3px * var(--base));
-    background: url(#{$url-base-line}/raindrops.svg) no-repeat calc(0% - 0.5px * var(--base)) center;
+    background: url(#{$url-base-line}/raindrops.svg?#{$version}) no-repeat calc(0% - 0.5px * var(--base)) center;
     background-size: calc(4px * var(--base));
     margin-left: calc(1.5px * var(--base));
     white-space: nowrap;
@@ -90,11 +90,11 @@ $url-base-fill: "__FRONTEND_URL__/img/weather/fill/svg-static";
         margin-bottom: calc(2px * var(--base));
 
         .prec {
-            background-image: url(#{$url-base-line}/raindrops.svg);
+            background-image: url(#{$url-base-line}/raindrops.svg?#{$version});
         }
 
         .wind {
-            background-image: url(#{$url-base-fill}/windsock.svg);
+            background-image: url(#{$url-base-fill}/windsock.svg?#{$version});
         }
     }
 }
@@ -102,7 +102,6 @@ $url-base-fill: "__FRONTEND_URL__/img/weather/fill/svg-static";
 
 .today {
     border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
     width: 100%;
     overflow: hidden;
     justify-content: space-between;
@@ -143,70 +142,26 @@ $url-base-fill: "__FRONTEND_URL__/img/weather/fill/svg-static";
     }
 
     .temp {
-        background-image: url(#{$url-base-fill}/thermometer.svg);
+        background-image: url(#{$url-base-fill}/thermometer.svg?#{$version});
     }
 
     .wind {
-        background-image: url(#{$url-base-fill}/windsock.svg);
+        background-image: url(#{$url-base-fill}/windsock.svg?#{$version});
     }
 
     .gusts {
-        background-image: url(#{$url-base-fill}/umbrella-wind-alt.svg);
+        background-image: url(#{$url-base-fill}/umbrella-wind-alt.svg?#{$version});
     }
 
     .prec {
-        background-image: url(#{$url-base-fill}/raindrops.svg);
+        background-image: url(#{$url-base-fill}/raindrops.svg?#{$version});
     }
 
     .sunrise {
-        background-image: url(#{$url-base-fill}/sunrise.svg);
+        background-image: url(#{$url-base-fill}/sunrise.svg?#{$version});
     }
 
     .sunset {
-        background-image: url(#{$url-base-fill}/sunset.svg);
+        background-image: url(#{$url-base-fill}/sunset.svg?#{$version});
     }
 }
-
-// .forecast {
-//     padding: 1rem;
-
-//     table {
-//         width: 100%;
-//     }
-
-//     tr.current td {
-//         background: #eee;
-//     }
-
-//     td {
-//         padding: 0.2rem;
-//         text-align: right;
-//         vertical-align: middle;
-//         font-size: 1rem;
-
-//         &.time {
-//             font-weight: 500;
-//             width: 1%;
-//         }
-
-//         .figure {
-//             @extend .row;
-//             justify-content: flex-end;
-//         }
-//     }
-
-//     img {
-//         vertical-align: middle;
-//         min-width: 2rem;
-//         height: auto;
-//     }
-
-//     .figure img {
-//         height: 2rem;
-//     }
-
-//     .value {
-//         display: inline-block;
-//         font-size: 1rem;
-//     }
-// }

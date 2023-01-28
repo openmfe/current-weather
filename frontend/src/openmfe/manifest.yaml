@@ -1,6 +1,6 @@
 version: "1.1" # version of the OpenMFE spec
 
-name:
+name: Current Weather
 icon: ./icon.svg
 tag: current-weather
 url:
@@ -36,7 +36,7 @@ attributes:
       enum: ["de-DE", "en-GB"]
 
 examples:
-  - description: Shows the weather in Alsdorf, Germany.
+  - description: Shows the weather in Aachen, Germany.
     attributes:
-      lat: 50.8560604
-      lon: 6.1558148
+      lat: 50.776334
+      lon: 6.083706
