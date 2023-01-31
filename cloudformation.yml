@@ -57,30 +57,6 @@ Resources:
       LogGroupName: !Sub "/aws/lambda/${AWS::StackName}"
       RetentionInDays: 7
 
-  # lambdaUrl:
-  #   Type: "AWS::Lambda::Url"
-  #   Properties:
-  #     AuthType: NONE
-  #     TargetFunctionArn: !Ref lambdaFunction
-  #     Cors:
-  #       AllowHeaders:
-  #         - '*'
-  #       AllowMethods:
-  #         - GET
-  #       AllowOrigins:
-  #         - '*'
-  #       ExposeHeaders:
-  #         - Date
-  #       MaxAge: 3600
-
-  # lambdaPermission:
-  #   Type: "AWS::Lambda::Permission"
-  #   Properties:
-  #     Action: "lambda:InvokeFunctionUrl"
-  #     Principal: "*"
-  #     FunctionName: !Ref lambdaFunction
-  #     FunctionUrlAuthType: NONE
-
   cloudfrontOriginIdentity:
     Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
     Properties:
@@ -132,17 +108,13 @@ Resources:
     Properties:
       DistributionConfig:
         Enabled: true
-        HttpVersion: http2
+        HttpVersion: http2and3
         PriceClass: PriceClass_100
         Origins:
          - Id: bucket
            DomainName: !Sub "${AWS::AccountId}-${AWS::Region}-${AWS::StackName}.s3.${AWS::Region}.amazonaws.com"
            S3OriginConfig:
              OriginAccessIdentity: !Sub "origin-access-identity/cloudfront/${cloudfrontOriginIdentity}"
-        #  - Id: lambda
-        #    DomainName: !Join [ '', !Split [ '/', !Join [ '', !Split [ 'https://', !GetAtt lambdaUrl.FunctionUrl ] ] ] ] # get domain name from URL
-        #    CustomOriginConfig:
-        #      OriginProtocolPolicy : https-only
         DefaultCacheBehavior:
           AllowedMethods:
             - GET
@@ -154,29 +126,11 @@ Resources:
             - OPTIONS
           DefaultTTL: 600
           ForwardedValues:
-            QueryString: false
+            QueryString: true
             Cookies:
               Forward: none
           TargetOriginId: bucket
           ViewerProtocolPolicy: https-only
-        # CacheBehaviors:
-        #   - PathPattern: /api*
-        #     AllowedMethods:
-        #       - GET
-        #       - HEAD
-        #       - OPTIONS
-        #     CachedMethods:
-        #       - GET
-        #       - HEAD
-        #       - OPTIONS
-        #     DefaultTTL: 600
-        #     ForwardedValues:
-        #       QueryString: true
-        #       Cookies:
-        #         Forward: none
-        #     TargetOriginId: lambda
-        #     ViewerProtocolPolicy: https-only
-
 
 # API Gateway
 
