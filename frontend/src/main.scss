@@ -11,24 +11,30 @@ $version: unique-id();
 
 .elem {
     --base: 10;
-    font-display: swap;
     display: block;
     overflow: hidden;
+    container-type: inline-size;
 }
 
-.elem.w-s {
-    --base: 12;
+@container (min-width: 450px) {
+    * {
+        --base: 12;
+    }
 }
 
-.elem.w-m {
-    --base: 14;
+@container (min-width: 600px) {
+    * {
+        --base: 14;
+    }
 }
 
-.elem.w-l {
-    --base: 16;
+@container (min-width: 800px) {
+    * {
+        --base: 16;
+    }
 }
 
-.elem.w-xl {
+@container (min-width: 1000px) {
     --base: 18;
 }
 

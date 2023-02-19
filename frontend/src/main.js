@@ -49,7 +49,7 @@ class CurrentWeather extends HTMLElement
         this._shadow.innerHTML = html`
             <style>${scss}</style>
 
-            <div class="elem ${this._size}">
+            <div class="elem">
                 <div class="current">
                     <div class="primary row">
                         <img class=cloud src="${ getIcon(this._weather[0].hourly[now.getHours()].i) }" alt="">
@@ -112,39 +112,6 @@ class CurrentWeather extends HTMLElement
         this._elem = this._shadow.querySelector(".elem")
     }
 
-    async _resize() {
-        const width = this.parentElement.clientWidth
-
-        if (width > 1000)
-            this._size = "w-xl"
-        else if (width > 800)
-            this._size = "w-l"
-        else if (width > 600)
-            this._size = "w-m"
-        else if (width > 450)
-            this._size = "w-s"
-        else
-            this._size = ""
-
-        if (this._elem) {
-            this._elem.classList = `elem ${this._size}`
-        }
-    }
-
-    connectedCallback() {
-        this._resize(this)
-
-        this._obs = new ResizeObserver(debounce(elems => {
-            elems.forEach(this._resize.bind(this))
-        }))
-
-        this._obs.observe(this.parentElement)
-    }
-
-    disconnectedCallback() {
-        this._obs.disconnect()
-    }
-
     async _fetchData() {
         const response = await fetch(`__BACKEND_URL__/runtime?lat=${this._attr.lat}&lon=${this._attr.lon}`)
         this._weather = await response.json()
@@ -177,13 +144,4 @@ const getIcon = (name, style = "line", anim = false) => IMG_URL_TPL
     .replace("__ANIM__", anim ? "svg" : "svg-static")
     .replace("__NAME__", name)
 
-function debounce(f) {
-    let timer = 0;
-    return function (...args) {
-        clearTimeout(timer);
-        timer = setTimeout(() => f.apply(this, args), 200);
-    }
-}
-
 customElements.define('current-weather', CurrentWeather)
-
