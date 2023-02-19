@@ -52,7 +52,7 @@ class CurrentWeather extends HTMLElement
             <div class="elem ${this._size}">
                 <div class="current">
                     <div class="primary row">
-                        <img class=cloud src="${ getIcon(this._weather[0].hourly[now.getHours()].i) }">
+                        <img class=cloud src="${ getIcon(this._weather[0].hourly[now.getHours()].i) }" alt="">
 
                         <div class="temp">
                             <span class="value">${ this._weather[0].hourly[now.getHours()].t.toFixed(1) }</span>
