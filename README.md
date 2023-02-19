@@ -20,3 +20,6 @@ source .env.prod && ./run.docker.sh -d
 
 Run the following command to launch the project: `source .env.prod && ./run.docker.sh`
 
+### Shutdown
+
+In the same directory, run `source .env.prod && docker-compose down`
